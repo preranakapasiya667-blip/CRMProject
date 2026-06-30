@@ -1,5 +1,5 @@
 public with sharing class OpportunityService {
    public static void createOpportunity() {
-        System.debug('Opportunity created');
-    }
+    System.debug('Version A + B merged properly');
+}
 }
