@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  validate:
+  validate-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,15 @@ jobs:
           echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
           sf org login sfdx-url -f auth.txt -s -a DevOrg
 
-      - name: Run Apex Tests
+      # ---------------- CI PART ----------------
+      - name: Run Apex Tests (CI)
         run: |
           sf apex run test --result-format human --wait 10
+
+      # ---------------- CD PART ----------------
+      - name: Validate Deployment (CD - SAFE)
+        run: |
+          sf project deploy validate \
+            --source-dir force-app \
+            --target-org DevOrg \
+            --test-level RunLocalTests
