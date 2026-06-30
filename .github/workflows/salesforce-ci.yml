@@ -1,7 +1,7 @@
-name: Salesforce CI Pipeline
+name: Simple CI Check
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
 
 jobs:
@@ -12,13 +12,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install Salesforce CLI
-        run: npm install @salesforce/cli --global
-
-      - name: Check CLI version
-        run: sf --version
+      - name: Print success message
+        run: echo "CI Pipeline Running Successfully"
