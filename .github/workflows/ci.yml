@@ -1,11 +1,11 @@
-name: Salesforce CI Pipeline
+name: Salesforce CI/CD Pipeline
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
-  salesforce-ci:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,5 +17,11 @@ jobs:
           npm install @salesforce/cli --global
           sf --version
 
-      - name: Validate setup
-        run: echo "Salesforce CLI installed successfully"
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
+          sf org login sfdx-url -f auth.txt -s -a DevOrg
+
+      - name: Run Apex Tests
+        run: |
+          sf apex run test --result-format human --wait 10
